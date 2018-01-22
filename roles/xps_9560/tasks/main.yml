@@ -13,12 +13,13 @@
   when: grub|changed
   notify: reboot
 
-- name: Switch to Intel GPU
-  become: yes
-  command: prime-select intel
-  register: prime
-  changed_when: prime.stdout is not search('the intel profile is already in use')
-  notify: reboot
+# I'm going stick to the nvidia drivers for a while
+# - name: Switch to Intel GPU
+#   become: yes
+#   command: prime-select intel
+#   register: prime
+#   changed_when: prime.stdout is not search('the intel profile is already in use')
+#   notify: reboot
 
 # Fan management - this is a huge pain in the ass.
 # the xps uses bios control by default. That runs the fans all the time.

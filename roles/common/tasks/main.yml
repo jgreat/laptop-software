@@ -14,6 +14,8 @@
       repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
     - file: vscode
       repo: deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main
+    - file: docker
+      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
 
 - name: Install Apt Keys
   become: yes
@@ -30,6 +32,8 @@
       url: https://dl.google.com/linux/linux_signing_key.pub
     - id: BE1229CF
       url: https://packages.microsoft.com/keys/microsoft.asc
+    - id: 0EBFCD88
+      url: https://download.docker.com/linux/ubuntu/gpg
 
 - name: Update Apt Cache
   become: yes
@@ -52,6 +56,7 @@
     - jq
     - tlp
     - tlp-rdw
+    - docker-ce
 
 - name: Install slack
   become: yes
