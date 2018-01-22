@@ -1,0 +1,11 @@
+---
+- name: Create ~/bin
+  file:
+    path: "{{ ansible_env.HOME }}/bin"
+    state: directory
+    mode: 0755
+
+- name: ~/bin to profile
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.profile"
+    line: 'PATH="${HOME}/.node/bin:${PATH}"'

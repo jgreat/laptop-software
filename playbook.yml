@@ -15,6 +15,9 @@
     - role: common
       tags: common
 
+    - role: profile
+      tags: profile
+
     - role: npm
       tags: npm
 

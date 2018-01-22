@@ -68,16 +68,19 @@
     - virtualbox-5.2
     - vagrant
 
-- name: Check for slack
+- name: Check installed snaps
   become: yes
   command: snap list
-  register: slack
-  changed_when: slack.stdout is not search('slack')
+  register: snaps
+  changed_when: snaps.stdout is not search(item)
+  with_items:
+    - slack
+    - kubectl
 
-- name: Install slack
+- name: Install snaps
   become: yes
-  command: snap install slack --classic
-  when: slack|changed
+  command: snap install {{ item }} --classic
+  when: snaps|changed
 
 - name: Install zoom
   become: yes
