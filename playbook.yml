@@ -23,3 +23,6 @@
     
     - role: keyboard_shortcuts
       tags: keyboard_shortcuts
+
+    - role: wallpaper
+      tags: wallpaper
