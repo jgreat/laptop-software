@@ -16,6 +16,10 @@
       url: https://packages.microsoft.com/keys/microsoft.asc
     - id: 0EBFCD88
       url: https://download.docker.com/linux/ubuntu/gpg
+    - id: 2980AECF
+      url: https://www.virtualbox.org/download/oracle_vbox_2016.asc
+    - id: 2099F7A4
+      url: http://pgp.mit.edu/pks/lookup?op=get&search=0xCE3F3DE92099F7A4
 
 - name: Install Apt Repos
   become: yes
@@ -34,6 +38,10 @@
       repo: deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main
     - file: docker
       repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+    - file: virtualbox
+      repo: deb https://download.virtualbox.org/virtualbox/debian {{ ansible_lsb.codename }} contrib
+    - file: vagrant
+      repo: deb https://vagrant-deb.linestarve.com/ any main
 
 - name: Update Apt Cache
   become: yes
@@ -57,10 +65,19 @@
     - tlp
     - tlp-rdw
     - docker-ce
+    - virtualbox-5.2
+    - vagrant
+
+- name: Check for slack
+  become: yes
+  command: snap list
+  register: slack
+  changed_when: slack.stdout is not search('slack')
 
 - name: Install slack
   become: yes
   command: snap install slack --classic
+  when: slack|changed
 
 - name: Install zoom
   become: yes

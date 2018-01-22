@@ -48,10 +48,11 @@
     name: jgreat
     shell: /usr/bin/zsh
 
-# - name: Install Spaceship theme
-#   npm:
-#     name: spaceship-prompt
-#     global: yes
+- name: Install Spaceship theme
+  npm:
+    executable: npm --no-save
+    name: spaceship-prompt
+    global: yes
 
 - name: Gnome Terminal - Create new profile
   dconf:
