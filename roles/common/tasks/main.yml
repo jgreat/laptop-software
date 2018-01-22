@@ -1,22 +1,4 @@
 ---
-- name: Install Apt Repos
-  become: yes
-  apt_repository:
-    filename: "{{ item.file }}"
-    repo: "{{ item.repo }}"
-  register: repos
-  with_items:
-    - file: nodesource
-      repo: deb https://deb.nodesource.com/node_8.x {{ ansible_lsb.codename }} main
-    - file: enpass
-      repo: deb http://repo.sinew.in/ stable main
-    - file: google-chrome
-      repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
-    - file: vscode
-      repo: deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main
-    - file: docker
-      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
-
 - name: Install Apt Keys
   become: yes
   apt_key:
@@ -34,6 +16,24 @@
       url: https://packages.microsoft.com/keys/microsoft.asc
     - id: 0EBFCD88
       url: https://download.docker.com/linux/ubuntu/gpg
+
+- name: Install Apt Repos
+  become: yes
+  apt_repository:
+    filename: "{{ item.file }}"
+    repo: "{{ item.repo }}"
+  register: repos
+  with_items:
+    - file: nodesource
+      repo: deb https://deb.nodesource.com/node_8.x {{ ansible_lsb.codename }} main
+    - file: enpass
+      repo: deb http://repo.sinew.in/ stable main
+    - file: google-chrome
+      repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
+    - file: vscode
+      repo: deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main
+    - file: docker
+      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
 
 - name: Update Apt Cache
   become: yes
