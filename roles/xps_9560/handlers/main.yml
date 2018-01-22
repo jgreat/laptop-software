@@ -1,0 +1,8 @@
+- name: reboot
+  become: yes
+  command: shutdown -r +1
+  listen: reboot
+
+- name: end_playbook
+  meta: end_play
+  listen: reboot

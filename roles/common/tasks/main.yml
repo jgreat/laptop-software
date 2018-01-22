@@ -1,0 +1,63 @@
+---
+- name: Install Apt Repos
+  become: yes
+  apt_repository:
+    filename: "{{ item.file }}"
+    repo: "{{ item.repo }}"
+  register: repos
+  with_items:
+    - file: nodesource
+      repo: deb https://deb.nodesource.com/node_8.x {{ ansible_lsb.codename }} main
+    - file: enpass
+      repo: deb http://repo.sinew.in/ stable main
+    - file: google-chrome
+      repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
+    - file: vscode
+      repo: deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main
+
+- name: Install Apt Keys
+  become: yes
+  apt_key:
+    id: "{{ item.id }}"
+    url: "{{ item.url }}"
+  register: keys
+  with_items:
+    - id: 68576280
+      url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    - id: 9798C2FC
+      url: https://dl.sinew.in/keys/enpass-linux.key
+    - id: D38B4796
+      url: https://dl.google.com/linux/linux_signing_key.pub
+    - id: BE1229CF
+      url: https://packages.microsoft.com/keys/microsoft.asc
+
+- name: Update Apt Cache
+  become: yes
+  apt:
+    update_cache: yes
+  when: repos|changed or keys|changed
+
+- name: Install Apt Packages
+  become: yes
+  apt:
+    pkg: "{{ item }}"
+  with_items:
+    - nodejs
+    - snapd
+    - vim
+    - zsh
+    - code
+    - google-chrome-stable
+    - python-psutil
+    - jq
+    - tlp
+    - tlp-rdw
+
+- name: Install slack
+  become: yes
+  command: snap install slack --classic
+
+- name: Install zoom
+  become: yes
+  apt:
+    deb: https://zoom.us/client/latest/zoom_amd64.deb

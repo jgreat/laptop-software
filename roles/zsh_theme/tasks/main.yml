@@ -1,0 +1,91 @@
+---
+- name: Create ~/.fonts
+  file:
+    path: "{{ ansible_env.HOME }}/.fonts"
+    state: directory
+    mode: 0755
+
+- name: Install Nerd Fonts
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ ansible_env.HOME }}/.fonts/{{ item.dest }}"
+  register: nerd_fonts
+  with_items:
+    - url: https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraMono/Regular/complete/Fura%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.otf
+      dest: Fura_Mono_Regular_Nerd_Font_Complete_Mono.otf
+    - url: https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraMono/Regular/complete/Fura%20Mono%20Regular%20Nerd%20Font%20Complete.otf
+      dest: Fura_Mono_Regular_Nerd_Font_Complete.otf
+
+- name: Update Font Cache
+  become: yes
+  command: fc-cache -fv
+  when: nerd_fonts|changed
+
+- name: git obbyrussell/oh-my-zsh
+  git:
+    repo: https://github.com/robbyrussell/oh-my-zsh.git
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh"
+    depth: 1
+    update: no
+  register: clone_ohmyzsh
+
+- name: Copy oh-my-zsh zshrc in place
+  copy:
+    src: "{{ ansible_env.HOME }}/.oh-my-zsh/templates/zshrc.zsh-template"
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    remote_src: True
+  when: clone_ohmyzsh|changed
+
+- name: Set ZSH variable to ~/.oh-my-zsh
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    regexp: 'export ZSH='
+    line: "export ZSH={{ ansible_env.HOME }}/.oh-my-zsh"
+
+- name: Set user shell to zsh
+  become: yes
+  user:
+    name: jgreat
+    shell: /usr/bin/zsh
+
+# - name: Install Spaceship theme
+#   npm:
+#     name: spaceship-prompt
+#     global: yes
+
+- name: Gnome Terminal - Create new profile
+  dconf:
+    key: "/org/gnome/terminal/legacy/profiles:/:{{ uuid }}/visible-name"
+    value: "'Nerd Font'"
+
+- name: Gnome Terminal - Unset system font
+  dconf:
+    key: "/org/gnome/terminal/legacy/profiles:/:{{ uuid }}/use-system-font"
+    value: "false"
+
+- name: Gnome Terminal - Set Nerd Font
+  dconf:
+    key: "/org/gnome/terminal/legacy/profiles:/:{{ uuid }}/font"
+    value: "'FuraMono Nerd Font 12'"
+
+- name: Gnome Terminal - Get profile list
+  dconf:
+    key: "/org/gnome/terminal/legacy/profiles:/list"
+    state: read
+  register: profile_list
+
+# - debug:
+#     msg: "{{ profile_list }}"
+
+# - debug:
+#     msg: "{{ profile_list.value | regex_findall('[\\w-]+') | union( [ uuid ] ) | map('regex_replace', '^(.*)$',  \"'\\1'\") | list | join(', ') }}"
+
+- name: Gnome Terminal - Write profile list
+  dconf:
+    key: "/org/gnome/terminal/legacy/profiles:/list"
+    value: "[{{ profile_list.value | regex_findall('[\\w-]+') | union( [ uuid ] ) | map('regex_replace', '^(.*)$',  \"'\\1'\") | list | join(', ') }}]"
+
+- name: Gnome Terminal - Change default profile
+  dconf:
+    key: "/org/gnome/terminal/legacy/profiles:/default"
+    value: "'{{ uuid }}'"

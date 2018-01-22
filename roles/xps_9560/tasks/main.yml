@@ -1,0 +1,27 @@
+---
+- name: Add kernel parameters to grub
+  become: yes
+  lineinfile:
+    path: "/etc/default/grub"
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash acpi_rev_override=5"'
+  register: grub
+
+- name: Run update-grub
+  become: yes
+  command: update-grub
+  when: grub|changed
+  notify: reboot
+
+- name: Switch to Intel GPU
+  become: yes
+  command: prime-select intel
+  register: prime
+  changed_when: prime.stdout is not search('the intel profile is already in use')
+  notify: reboot
+
+# Fan management - this is a huge pain in the ass.
+# the xps uses bios control by default. That runs the fans all the time.
+
+
+

@@ -1,0 +1,22 @@
+---
+# Set up npm so we can do npm -g and install in home dir.
+- name: Create ~/.node
+  file:
+    path: "{{ ansible_env.HOME }}/.node"
+    state: directory
+    mode: 0755
+
+- name: Add prefix to npm config
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.npmrc"
+    regexp: '^prefix='
+    line: "prefix={{ ansible_env.HOME }}/.node"
+
+- name: Add npm vars to .profile
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.profile"
+    line: "{{ item }}"
+  with_items:
+    - PATH="${HOME}/.node/bin:${PATH}"
+    - NODE_PATH="${HOME}/.node/lib/node_modules:${NODE_PATH}"
+    - MANPATH="${HOME}/.node/share/man:${MANPATH}"
