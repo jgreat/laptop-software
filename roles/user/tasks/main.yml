@@ -1,0 +1,22 @@
+---
+- name: Create ~/bin
+  file:
+    path: "{{ ansible_env.HOME }}/bin"
+    state: directory
+    mode: 0755
+
+- name: User to docker group
+  become: yes
+  user:
+    name: "{{ ansible_user_id }}"
+    generate_ssh_key: yes
+    groups:
+      - docker
+      - vboxusers
+    append: yes
+
+- name: Set git co alias
+  git_config:
+    name: alias.co
+    value: checkout
+    scope: global

@@ -15,15 +15,15 @@
     - role: common
       tags: common
 
-    - role: profile
-      tags: profile
+    - role: user
+      tags: user
 
     - role: npm
       tags: npm
 
     - role: zsh_theme
       tags: zsh_theme
-    
+
     - role: keyboard_shortcuts
       tags: keyboard_shortcuts
 
