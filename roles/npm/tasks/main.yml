@@ -12,9 +12,9 @@
     regexp: '^prefix='
     line: "prefix={{ ansible_env.HOME }}/.node"
 
-- name: Add npm vars to .profile
+- name: Add npm vars to .zshrc
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.profile"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     line: "{{ item }}"
   with_items:
     - PATH="${HOME}/.node/bin:${PATH}"

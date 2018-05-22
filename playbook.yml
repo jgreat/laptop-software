@@ -5,9 +5,9 @@
       tags: hardware
       when: ansible_product_name == "XPS 15 9560"
 
-    - role: razer_blade_stealth
-      tags: hardware
-      when: ansible_product_name == "Razer Blade Stealth"
+    # - role: razer_blade_stealth
+    #   tags: hardware
+    #   when: ansible_product_name == "Blade Stealth"
 
     - role: hostname
       tags: hostname

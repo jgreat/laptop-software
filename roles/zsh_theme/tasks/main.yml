@@ -19,7 +19,7 @@
 - name: Update Font Cache
   become: yes
   command: fc-cache -fv
-  when: nerd_fonts|changed
+  when: nerd_fonts is changed
 
 - name: git obbyrussell/oh-my-zsh
   git:
@@ -34,7 +34,7 @@
     src: "{{ ansible_env.HOME }}/.oh-my-zsh/templates/zshrc.zsh-template"
     dest: "{{ ansible_env.HOME }}/.zshrc"
     remote_src: True
-  when: clone_ohmyzsh|changed
+  when: clone_ohmyzsh is changed
 
 - name: Set ZSH variable to ~/.oh-my-zsh
   lineinfile:
@@ -48,11 +48,11 @@
     name: jgreat
     shell: /usr/bin/zsh
 
-- name: Install Spaceship theme
-  npm:
-    executable: npm --no-save
-    name: spaceship-prompt
-    global: yes
+# - name: Install Spaceship theme
+#   npm:
+#     executable: npm --no-save
+#     name: spaceship-prompt
+#     global: yes
 
 - name: Gnome Terminal - Create new profile
   dconf:

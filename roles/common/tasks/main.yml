@@ -6,20 +6,30 @@
     url: "{{ item.url }}"
   register: keys
   with_items:
+    # NodeJS
     - id: 68576280
       url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    # Enpass
     - id: 9798C2FC
       url: https://dl.sinew.in/keys/enpass-linux.key
+    # Google
     - id: D38B4796
       url: https://dl.google.com/linux/linux_signing_key.pub
+    # Microsoft
     - id: BE1229CF
       url: https://packages.microsoft.com/keys/microsoft.asc
+    # Docker
     - id: 0EBFCD88
       url: https://download.docker.com/linux/ubuntu/gpg
+    # Virtualbox
     - id: 2980AECF
       url: https://www.virtualbox.org/download/oracle_vbox_2016.asc
+    # Vagrant
     - id: 2099F7A4
       url: http://pgp.mit.edu/pks/lookup?op=get&search=0xCE3F3DE92099F7A4
+    # Tilix
+    - id: EEA14886
+      url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7B2C3B0889BF5709A105D03AC2518248EEA14886
 
 - name: Install Apt Repos
   become: yes
@@ -29,44 +39,52 @@
   register: repos
   with_items:
     - file: nodesource
-      repo: deb https://deb.nodesource.com/node_8.x {{ ansible_lsb.codename }} main
+      repo: deb https://deb.nodesource.com/node_10.x {{ ansible_lsb.codename }} main
     - file: enpass
       repo: deb http://repo.sinew.in/ stable main
     - file: google-chrome
       repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
+    - file: azurecli
+      repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main
     - file: vscode
       repo: deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main
     - file: docker
       repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
     - file: virtualbox
-      repo: deb https://download.virtualbox.org/virtualbox/debian {{ ansible_lsb.codename }} contrib
+      repo: deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian {{ ansible_lsb.codename }} contrib
     - file: vagrant
       repo: deb https://vagrant-deb.linestarve.com/ any main
+    - file: tilix
+      repo: deb http://ppa.launchpad.net/webupd8team/terminix/ubuntu artful main
 
 - name: Update Apt Cache
   become: yes
   apt:
     update_cache: yes
-  when: repos|changed or keys|changed
+  when: repos is changed or keys is changed
 
 - name: Install Apt Packages
   become: yes
   apt:
     pkg: "{{ item }}"
   with_items:
-    - nodejs
-    - snapd
-    - vim
-    - zsh
+    - azure-cli
     - code
-    - google-chrome-stable
-    - python-psutil
-    - jq
-    - tlp
-    - tlp-rdw
     - docker-ce
-    - virtualbox-5.2
+    - gimp
+    - google-chrome-stable
+    - jq
+    - nautilus-image-converter
+    - network-manager-openvpn-gnome
+    - nodejs
+    - openvpn-systemd-resolved
+    - python-psutil
+    - snapd
+    - steam
     - vagrant
+    - vim
+    - virtualbox-5.2
+    - zsh
 
 - name: Check installed snaps
   become: yes
@@ -80,7 +98,7 @@
 - name: Install snaps
   become: yes
   command: snap install {{ item }} --classic
-  when: snaps|changed
+  when: snaps is changed
 
 - name: Install zoom
   become: yes
