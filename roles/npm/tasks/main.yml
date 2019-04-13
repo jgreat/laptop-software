@@ -6,6 +6,12 @@
     state: directory
     mode: 0755
 
+- name: .npmrc file
+  copy:
+    content: ""
+    dest: "{{ ansible_env.HOME }}/.npmrc"
+    force: no
+
 - name: Add prefix to npm config
   lineinfile:
     path: "{{ ansible_env.HOME }}/.npmrc"
@@ -20,3 +26,9 @@
     - PATH="${HOME}/.node/bin:${PATH}"
     - NODE_PATH="${HOME}/.node/lib/node_modules:${NODE_PATH}"
     - MANPATH="${HOME}/.node/share/man:${MANPATH}"
+
+# - name: Install Spaceship theme
+#   npm:
+#     executable: npm --no-save
+#     name: spaceship-prompt
+#     global: yes

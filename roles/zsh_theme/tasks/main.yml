@@ -48,32 +48,26 @@
     name: jgreat
     shell: /usr/bin/zsh
 
-# - name: Install Spaceship theme
-#   npm:
-#     executable: npm --no-save
-#     name: spaceship-prompt
-#     global: yes
+# - name: Gnome Terminal - Create new profile
+#   dconf:
+#     key: "/org/gnome/terminal/legacy/profiles:/:{{ uuid }}/visible-name"
+#     value: "'Nerd Font'"
 
-- name: Gnome Terminal - Create new profile
-  dconf:
-    key: "/org/gnome/terminal/legacy/profiles:/:{{ uuid }}/visible-name"
-    value: "'Nerd Font'"
+# - name: Gnome Terminal - Unset system font
+#   dconf:
+#     key: "/org/gnome/terminal/legacy/profiles:/:{{ uuid }}/use-system-font"
+#     value: "false"
 
-- name: Gnome Terminal - Unset system font
-  dconf:
-    key: "/org/gnome/terminal/legacy/profiles:/:{{ uuid }}/use-system-font"
-    value: "false"
+# - name: Gnome Terminal - Set Nerd Font
+#   dconf:
+#     key: "/org/gnome/terminal/legacy/profiles:/:{{ uuid }}/font"
+#     value: "'FuraMono Nerd Font 12'"
 
-- name: Gnome Terminal - Set Nerd Font
-  dconf:
-    key: "/org/gnome/terminal/legacy/profiles:/:{{ uuid }}/font"
-    value: "'FuraMono Nerd Font 12'"
-
-- name: Gnome Terminal - Get profile list
-  dconf:
-    key: "/org/gnome/terminal/legacy/profiles:/list"
-    state: read
-  register: profile_list
+# - name: Gnome Terminal - Get profile list
+#   dconf:
+#     key: "/org/gnome/terminal/legacy/profiles:/list"
+#     state: read
+#   register: profile_list
 
 # - debug:
 #     msg: "{{ profile_list }}"
@@ -81,12 +75,12 @@
 # - debug:
 #     msg: "{{ profile_list.value | regex_findall('[\\w-]+') | union( [ uuid ] ) | map('regex_replace', '^(.*)$',  \"'\\1'\") | list | join(', ') }}"
 
-- name: Gnome Terminal - Write profile list
-  dconf:
-    key: "/org/gnome/terminal/legacy/profiles:/list"
-    value: "[{{ profile_list.value | regex_findall('[\\w-]+') | union( [ uuid ] ) | map('regex_replace', '^(.*)$',  \"'\\1'\") | list | join(', ') }}]"
+# - name: Gnome Terminal - Write profile list
+#   dconf:
+#     key: "/org/gnome/terminal/legacy/profiles:/list"
+#     value: "[{{ profile_list.value | regex_findall('[\\w-]+') | union( [ uuid ] ) | map('regex_replace', '^(.*)$',  \"'\\1'\") | list | join(', ') }}]"
 
-- name: Gnome Terminal - Change default profile
-  dconf:
-    key: "/org/gnome/terminal/legacy/profiles:/default"
-    value: "'{{ uuid }}'"
+# - name: Gnome Terminal - Change default profile
+#   dconf:
+#     key: "/org/gnome/terminal/legacy/profiles:/default"
+#     value: "'{{ uuid }}'"
