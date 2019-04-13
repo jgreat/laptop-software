@@ -45,7 +45,7 @@
 - name: Set user shell to zsh
   become: yes
   user:
-    name: jgreat
+    name: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh
 
 # - name: Gnome Terminal - Create new profile
