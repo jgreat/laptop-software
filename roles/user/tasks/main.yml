@@ -25,7 +25,7 @@
 
 - name: Set git github include
   git_config:
-    name: includeIf.gitdir:~/git/github.com/**.path
+    name: includeIf.gitdir:git/github.com/**.path
     value: .gitconfig-github.com
     scope: global
 
