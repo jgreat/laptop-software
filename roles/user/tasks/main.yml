@@ -23,17 +23,31 @@
     value: checkout
     scope: global
 
+- name: Set git github include
+  git_config:
+    name: includeif.gitdir:~/git/github.com.path
+    value: .gitconfig-github.com
+    scope: global
+
+- name: github.com include
+  copy:
+    dest: "{{ ansible_env.HOME }}/.gitconfig-github.com"
+    content: |
+      [user]
+        name = Jason Greathouse
+        email = jgreat@jgreat.me
+
 # - name: Set git email
 #   git_config:
 #     name: user.email
 #     value: jgreat@jgreat.me
 #     scope: global
 
-- name: Set git user name
-  git_config:
-    name: user.name
-    value: Jason Greathouse
-    scope: global
+# - name: Set git user name
+#   git_config:
+#     name: user.name
+#     value: Jason Greathouse
+#     scope: global
 
 - name: Link vte for tilix
   become: yes
@@ -49,3 +63,12 @@
       if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
         source /etc/profile.d/vte.sh
       fi
+
+- name: Do bad things with known_hosts
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.ssh/config"
+    create: yes
+    block: |
+      host *
+        StrictHostKeyChecking no
+        UserKnownHostsFile /dev/null
