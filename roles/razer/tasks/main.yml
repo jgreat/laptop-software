@@ -1,0 +1,65 @@
+---
+- name: Check kernel options
+  become: yes
+  command: kernelstub -p
+  register: kernel_options
+  changed_when: kernel_options.stderr is not search(item)
+  with_items:
+  # - "i915.enable_rc6=0"
+  - "button.lid_init_state=open"
+
+- name: Add kernel options to kernelstub
+  become: yes
+  command: kernelstub -a "button.lid_init_state=open"
+  when: kernel_options is changed
+  notify: reboot
+
+- name: mkdir ~/drivers
+  file:
+    path: "{{ ansible_env.HOME }}/drivers"
+    state: directory
+    mode: 0755
+
+- name: Get intel AX-200 wifi firmware
+  get_url:
+    url: "https://wireless.wiki.kernel.org/_media/en/users/drivers/iwlwifi/iwlwifi-cc-46.3cfab8da.0.tgz"
+    dest: "{{ ansible_env.HOME }}/drivers"
+  register: download_firmware
+
+- name: Untar AX-200 wifi firmware
+  become: yes
+  unarchive:
+    src: "{{ ansible_env.HOME }}/drivers/iwlwifi-cc-46.3cfab8da.0.tgz"
+    dest: /lib/firmware
+    extra_opts:
+    - "--strip-components=1"
+  when: download_firmware is changed
+  notify: reboot
+
+- name: Install Nvidia PPA
+  become: yes
+  apt_repository:
+    filename: nvidia
+    repo: ppa:graphics-drivers/ppa
+
+- name: Install Nvidia Drivers
+  become: yes
+  apt:
+    pkg:
+    -  nvidia-driver-430
+  notify: reboot
+
+
+# - name: Add kernel parameters to grub
+#   become: yes
+#   lineinfile:
+#     path: "/etc/default/grub"
+#     regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
+#     line: 'GRUB_CMDLINE_LINUX_DEFAULT="button.lid_init_state=open i915.enable_rc6=0 quiet splash"'
+#   register: grub
+
+# - name: Run update-grub
+#   become: yes
+#   command: update-grub
+#   when: grub|changed
+#   notify: reboot

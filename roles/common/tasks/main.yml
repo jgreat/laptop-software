@@ -24,9 +24,15 @@
     # Virtualbox
     - id: 2980AECF
       url: https://www.virtualbox.org/download/oracle_vbox_2016.asc
-    # Tilix
-    - id: EEA14886
-      url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7B2C3B0889BF5709A105D03AC2518248EEA14886
+    # # Tilix
+    # - id: EEA14886
+    #   url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7B2C3B0889BF5709A105D03AC2518248EEA14886
+    # # Ukuu
+    # - id: 2D0F61F0
+    #   url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x1B32B87ABAEE357218F6B48CB5B116B72D0F61F0
+    # # OpenRazer
+    # - id: 7B2AEE37
+    #   url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x903936CAB6049E2E6C33D5D8073E051D7B2AEE37
 
 - name: Install Apt Repos
   become: yes
@@ -36,47 +42,67 @@
   register: repos
   with_items:
     - file: nodesource
-      repo: deb https://deb.nodesource.com/node_10.x {{ ansible_lsb.codename }} main
+      repo: deb https://deb.nodesource.com/node_12.x {{ ansible_lsb.codename }} main
     - file: enpass
       repo: deb http://repo.sinew.in/ stable main
     - file: google-chrome
       repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
-    - file: azurecli
-      repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main
+    # - file: azurecli
+    #   repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ ansible_lsb.codename }} main
     - file: docker
-      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu artful stable
+      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
     - file: virtualbox
       repo: deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian {{ ansible_lsb.codename }} contrib
     - file: tilix
-      repo: deb http://ppa.launchpad.net/webupd8team/terminix/ubuntu artful main
+      repo: ppa:webupd8team/terminix
+    - file: ukuu
+      repo: ppa:teejee2008/ppa
+    - file: openRazer
+      repo: ppa:openrazer/stable
+    - file: polychromatic
+      repo: ppa:polychromatic/stable
 
-- name: Update Apt Cache
+# - name: Update Apt Cache
+#   become: yes
+#   apt:
+#     update_cache: yes
+#   when: repos is changed or keys is changed
+
+- name: Accept virtualbox ext pack license
   become: yes
-  apt:
-    update_cache: yes
-  when: repos is changed or keys is changed
+  debconf:
+    name: virtualbox-ext-pack
+    question: virtualbox-ext-pack/license
+    value: 'true'
+    vtype: select
 
 - name: Install Apt Packages
   become: yes
   apt:
     pkg:
-    - azure-cli
+    # - azure-cli
     - code
     - docker-ce
+    - enpass
     - gimp
+    - gnome-shell-extension-appindicator
     - google-chrome-stable
     - jq
     - nautilus-image-converter
     - network-manager-openvpn-gnome
     - nodejs
+    - openrazer-meta
     - openvpn-systemd-resolved
+    - polychromatic
     - python-psutil
     - python3-pip
     - snapd
     - steam
     - tilix
+    - ukuu
     - vim
-    - virtualbox-5.2
+    - virtualbox-6.0
+    - virtualbox-ext-pack
     - zsh
 
 - name: Install awscli
@@ -102,7 +128,8 @@
     - slack
     - kubectl
 
-- name: Install zoom
-  become: yes
-  apt:
-    deb: https://zoom.us/client/latest/zoom_amd64.deb
+# - name: Install zoom
+#   become: yes
+#   apt:
+#     deb: https://zoom.us/client/latest/zoom_amd64.deb
+  

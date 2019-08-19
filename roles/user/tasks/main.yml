@@ -5,14 +5,16 @@
     state: directory
     mode: 0755
 
-- name: User to docker group
+- name: User - shell to zsh, groups to docker,vboxuser
   become: yes
   user:
     name: "{{ ansible_user_id }}"
-    generate_ssh_key: yes
+    # generate_ssh_key: yes
     groups:
       - docker
       - vboxusers
+      - plugdev
+    shell: /usr/bin/zsh
     append: yes
 
 - name: Set git co alias
@@ -20,3 +22,30 @@
     name: alias.co
     value: checkout
     scope: global
+
+# - name: Set git email
+#   git_config:
+#     name: user.email
+#     value: jgreat@jgreat.me
+#     scope: global
+
+- name: Set git user name
+  git_config:
+    name: user.name
+    value: Jason Greathouse
+    scope: global
+
+- name: Link vte for tilix
+  become: yes
+  file:
+    state: link
+    src: /etc/profile.d/vte-2.91.sh
+    dest: /etc/profile.d/vte.sh
+
+- name: Set vte in .zshrc for tilix
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    block: |
+      if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+        source /etc/profile.d/vte.sh
+      fi

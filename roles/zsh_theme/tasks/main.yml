@@ -42,45 +42,21 @@
     regexp: 'export ZSH='
     line: "export ZSH={{ ansible_env.HOME }}/.oh-my-zsh"
 
-- name: Set user shell to zsh
-  become: yes
-  user:
-    name: "{{ ansible_user_id }}"
-    shell: /usr/bin/zsh
+- name: git denysdovhan/spaceship
+  git:
+    repo: https://github.com/denysdovhan/spaceship-prompt.git
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/themes/spaceship-prompt"
+    depth: 1
+  register: clone_spaceship
 
-# - name: Gnome Terminal - Create new profile
-#   dconf:
-#     key: "/org/gnome/terminal/legacy/profiles:/:{{ uuid }}/visible-name"
-#     value: "'Nerd Font'"
+- name: Link spaceship theme
+  file:
+    state: link
+    src: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme"
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
 
-# - name: Gnome Terminal - Unset system font
-#   dconf:
-#     key: "/org/gnome/terminal/legacy/profiles:/:{{ uuid }}/use-system-font"
-#     value: "false"
-
-# - name: Gnome Terminal - Set Nerd Font
-#   dconf:
-#     key: "/org/gnome/terminal/legacy/profiles:/:{{ uuid }}/font"
-#     value: "'FuraMono Nerd Font 12'"
-
-# - name: Gnome Terminal - Get profile list
-#   dconf:
-#     key: "/org/gnome/terminal/legacy/profiles:/list"
-#     state: read
-#   register: profile_list
-
-# - debug:
-#     msg: "{{ profile_list }}"
-
-# - debug:
-#     msg: "{{ profile_list.value | regex_findall('[\\w-]+') | union( [ uuid ] ) | map('regex_replace', '^(.*)$',  \"'\\1'\") | list | join(', ') }}"
-
-# - name: Gnome Terminal - Write profile list
-#   dconf:
-#     key: "/org/gnome/terminal/legacy/profiles:/list"
-#     value: "[{{ profile_list.value | regex_findall('[\\w-]+') | union( [ uuid ] ) | map('regex_replace', '^(.*)$',  \"'\\1'\") | list | join(', ') }}]"
-
-# - name: Gnome Terminal - Change default profile
-#   dconf:
-#     key: "/org/gnome/terminal/legacy/profiles:/default"
-#     value: "'{{ uuid }}'"
+- name: Set spaceship zsh theme
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    regexp: '^ZSH_THEME='
+    line: 'ZSH_THEME="spaceship"'

@@ -2,7 +2,8 @@
   become: yes
   command: shutdown -r +1
   listen: reboot
+  notify: end_playbook
 
 - name: end_playbook
   meta: end_play
-  listen: reboot
+  listen: end_playbook
