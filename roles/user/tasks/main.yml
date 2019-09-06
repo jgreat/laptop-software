@@ -37,18 +37,6 @@
       	name = Jason Greathouse
       	email = jgreat@jgreat.me
 
-# - name: Set git email
-#   git_config:
-#     name: user.email
-#     value: jgreat@jgreat.me
-#     scope: global
-
-# - name: Set git user name
-#   git_config:
-#     name: user.name
-#     value: Jason Greathouse
-#     scope: global
-
 - name: Link vte for tilix
   become: yes
   file:
