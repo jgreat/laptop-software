@@ -13,7 +13,7 @@
     regexp: '.*'
     line: mars
 
-- name: Set hostname
-  become: yes
-  hostname:
-    name: mars
+# - name: Set hostname
+#   become: yes
+#   hostname:
+#     name: mars

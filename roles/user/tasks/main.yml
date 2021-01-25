@@ -11,7 +11,7 @@
     name: "{{ ansible_user_id }}"
     # generate_ssh_key: yes
     groups:
-      # - docker
+      - docker
       - plugdev
       # - vboxusers
     shell: /usr/bin/zsh
@@ -35,34 +35,12 @@
     value: jgreat@jgreat.me
     scope: global
 
-# - name: Set git github include
-#   git_config:
-#     name: includeIf.gitdir:git/reelse/**.path
-#     value: .gitconfig-.com
-#     scope: global
-
-# - name:  include
-#   copy:
-#     dest: "{{ ansible_env.HOME }}/.gitconfig-jgreat.com"
-#     content: |
-#       [user]
-#       	email = jgreat@jgreat.me
-
-# - name: github.com include
-#   copy:
-#     dest: "{{ ansible_env.HOME }}/.gitconfig-github.com"
-#     content: |
-#       [user]
-#       	name = Jason Greathouse
-#       	email = jgreat@jgreat.me
-
-
-- name: Link vte for tilix
-  become: yes
-  file:
-    state: link
-    src: /etc/profile.d/vte-2.91.sh
-    dest: /etc/profile.d/vte.sh
+# - name: Link vte for tilix
+#   become: yes
+#   file:
+#     state: link
+#     src: /etc/profile.d/vte-2.91.sh
+#     dest: /etc/profile.d/vte.sh
 
 - name: Set vte in .zshrc for tilix
   blockinfile:
@@ -70,7 +48,7 @@
     create: yes
     block: |
       if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-        source /etc/profile.d/vte.sh
+        source /etc/profile.d/vte-2.91.sh
       fi
 
 - name: Set kubectl options in .zshrc

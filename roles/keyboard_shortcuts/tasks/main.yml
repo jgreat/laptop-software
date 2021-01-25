@@ -1,34 +1,34 @@
----
-- name: Remove Super+S shortcut
-  dconf:
-    key: "/org/gnome/shell/keybindings/toggle-overview"
-    value: "@as []"
+# ---
+# - name: Remove Super+S shortcut
+#   dconf:
+#     key: "/org/gnome/shell/keybindings/toggle-overview"
+#     value: "@as []"
 
-- name: Keyboard Shortcuts - custom0
-  dconf:
-    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/{{ item.key }}"
-    value: "{{ item.value }}"
-  with_items:
-    - key: "binding"
-      value: "'<Super>d'"
-    - key: "command"
-      value: "'gnome-control-center display'"
-    - key: "name"
-      value: "'Show display settings'"
+# - name: Keyboard Shortcuts - custom0
+#   dconf:
+#     key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/{{ item.key }}"
+#     value: "{{ item.value }}"
+#   with_items:
+#     - key: "binding"
+#       value: "'<Super>d'"
+#     - key: "command"
+#       value: "'gnome-control-center display'"
+#     - key: "name"
+#       value: "'Show display settings'"
 
-- name: Keyboard Shortcuts - custom1
-  dconf:
-    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/{{ item.key }}"
-    value: "{{ item.value }}"
-  with_items:
-    - key: "binding"
-      value: "'<Super>s'"
-    - key: "command"
-      value: "'gnome-control-center sound'"
-    - key: "name"
-      value: "'Show sound settings'"
+# - name: Keyboard Shortcuts - custom1
+#   dconf:
+#     key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/{{ item.key }}"
+#     value: "{{ item.value }}"
+#   with_items:
+#     - key: "binding"
+#       value: "'<Super>s'"
+#     - key: "command"
+#       value: "'gnome-control-center sound'"
+#     - key: "name"
+#       value: "'Show sound settings'"
 
-- name: Keyboard Shortcuts - custom-keybindings
-  dconf:
-    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
-    value: "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']"
+# - name: Keyboard Shortcuts - custom-keybindings
+#   dconf:
+#     key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
+#     value: "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']"

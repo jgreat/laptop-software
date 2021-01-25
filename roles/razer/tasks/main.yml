@@ -14,40 +14,40 @@
   when: kernel_options is changed
   notify: reboot
 
-- name: mkdir ~/drivers
-  file:
-    path: "{{ ansible_env.HOME }}/drivers"
-    state: directory
-    mode: 0755
+# - name: mkdir ~/drivers
+#   file:
+#     path: "{{ ansible_env.HOME }}/drivers"
+#     state: directory
+#     mode: 0755
 
-- name: Get intel AX-200 wifi firmware
-  get_url:
-    url: "https://wireless.wiki.kernel.org/_media/en/users/drivers/iwlwifi/iwlwifi-cc-46.3cfab8da.0.tgz"
-    dest: "{{ ansible_env.HOME }}/drivers"
-  register: download_firmware
+# - name: Get intel AX-200 wifi firmware
+#   get_url:
+#     url: "https://wireless.wiki.kernel.org/_media/en/users/drivers/iwlwifi/iwlwifi-cc-46.3cfab8da.0.tgz"
+#     dest: "{{ ansible_env.HOME }}/drivers"
+#   register: download_firmware
 
-- name: Untar AX-200 wifi firmware
-  become: yes
-  unarchive:
-    src: "{{ ansible_env.HOME }}/drivers/iwlwifi-cc-46.3cfab8da.0.tgz"
-    dest: /lib/firmware
-    extra_opts:
-    - "--strip-components=1"
-  when: download_firmware is changed
-  notify: reboot
+# - name: Untar AX-200 wifi firmware
+#   become: yes
+#   unarchive:
+#     src: "{{ ansible_env.HOME }}/drivers/iwlwifi-cc-46.3cfab8da.0.tgz"
+#     dest: /lib/firmware
+#     extra_opts:
+#     - "--strip-components=1"
+#   when: download_firmware is changed
+#   notify: reboot
 
-- name: Install Nvidia PPA
-  become: yes
-  apt_repository:
-    filename: nvidia
-    repo: ppa:graphics-drivers/ppa
+# - name: Install Nvidia PPA
+#   become: yes
+#   apt_repository:
+#     filename: nvidia
+#     repo: ppa:graphics-drivers/ppa
 
-- name: Install Nvidia Drivers
-  become: yes
-  apt:
-    pkg:
-    -  nvidia-driver-430
-  notify: reboot
+# - name: Install Nvidia Drivers
+#   become: yes
+#   apt:
+#     pkg:
+#     -  nvidia-driver-430
+#   notify: reboot
 
 
 # - name: Add kernel parameters to grub
