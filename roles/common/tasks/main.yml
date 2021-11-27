@@ -15,12 +15,15 @@
     # Google
     - id: D38B4796
       url: https://dl.google.com/linux/linux_signing_key.pub
-    # # Microsoft
-    # - id: BE1229CF
-    #   url: https://packages.microsoft.com/keys/microsoft.asc
+    # Microsoft
+    - id: BE1229CF
+      url: https://packages.microsoft.com/keys/microsoft.asc
     # Docker
     - id: 0EBFCD88
       url: https://download.docker.com/linux/ubuntu/gpg
+    # Signal
+    - id: 57F6FB06
+      url: https://updates.signal.org/desktop/apt/keys.asc
     # Virtualbox
     # - id: 2980AECF
     #   url: https://www.virtualbox.org/download/oracle_vbox_2016.asc
@@ -39,19 +42,22 @@
   register: repos
   with_items:
     - file: nodesource
-      repo: deb https://deb.nodesource.com/node_14.x {{ ansible_lsb.codename }} main
+      repo: deb https://deb.nodesource.com/node_16.x {{ ansible_lsb.codename }} main
     - file: enpass
       repo: deb http://repo.sinew.in/ stable main
     - file: google-chrome
       repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
     - file: docker
       repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+    - file: microsoft-vscode
+      repo: deb [arch=amd64] https://packages.microsoft.com/repos/code stable main
+    - file: microsoft-azure-cli
+      repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli {{ ansible_lsb.codename }} main
+    - file: signal
+      repo: deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main
     # - file: virtualbox
     #   repo: deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian {{ ansible_lsb.codename }} contrib
-    # - file: tilix
-    #   repo: ppa:webupd8team/terminix
-    # - file: ukuu
-    #   repo: ppa:teejee2008/ppa
+
 
 # - name: Accept virtualbox ext pack license
 #   become: yes
@@ -73,19 +79,27 @@
     - jq
     - nautilus-image-converter
     - nodejs
-    # - python3-pip
     - snapd
     - steam
     - tilix
     - vim
     - zsh
+    - code
+    - signal-desktop
+    - python3-pip
 
 
-# - name: Install awscli
-#   become: yes
-#   pip:
-#     name: awscli
-#     executable: pip3
+- name: Install awscli
+  become: yes
+  pip:
+    name: awscli
+    executable: pip3
+
+- name: Install docker-compose
+  become: yes
+  pip:
+    name: docker-compose
+    executable: pip3
 
 - name: Check installed snaps
   become: yes
@@ -97,6 +111,7 @@
     - kubectl
     - multipass
     - helm
+    - kontena-lens
 
 - name: Install snaps
   become: yes
@@ -107,9 +122,10 @@
     - kubectl
     - multipass
     - helm
+    - kontena-lens
 
-# - name: Install zoom
-#   become: yes
-#   apt:
-#     deb: https://zoom.us/client/latest/zoom_amd64.deb
+#- name: Install zoom
+#  become: yes
+#  apt:
+#    deb: https://zoom.us/client/latest/zoom_amd64.deb
   

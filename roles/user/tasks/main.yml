@@ -68,3 +68,11 @@
       host *
         StrictHostKeyChecking no
         UserKnownHostsFile /dev/null
+
+- name: Set aliases in .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    create: yes
+    block: |
+      alias tf=terraform
+      alias k=kubectl

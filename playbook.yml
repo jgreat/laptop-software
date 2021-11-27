@@ -1,35 +1,45 @@
 ---
 - hosts: localhost
   roles:
-    # - role: xps_9560
-    #   tags: hardware
-    #   when: ansible_product_name == "XPS 15 9560"
+    - role: xps_9560
+      tags: 
+        - hardware
+      when: ansible_product_name == "XPS 15 9560"
 
     - role: razer
-      tags: hardware
+      tags:
+        - hardware
       when: ansible_product_name == "Blade Stealth"
 
     - role: razer
-      tags: hardware
+      tags:
+        - hardware
       when: ansible_product_name == "Blade"
 
     - role: hostname
-      tags: hostname
+      tags:
+        - hostname
 
     - role: common
-      tags: common
+      tags:
+        - common
 
     - role: user
-      tags: user
+      tags:
+        - user
 
     - role: zsh_theme
-      tags: zsh_theme
+      tags: 
+        - zsh_theme
 
     - role: npm
-      tags: npm
+      tags: 
+        - npm
 
     - role: keyboard_shortcuts
-      tags: keyboard_shortcuts
+      tags: 
+        - keyboard_shortcuts
 
     - role: wallpaper
-      tags: wallpaper
+      tags: 
+        - wallpaper
