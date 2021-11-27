@@ -19,10 +19,11 @@
     line: "prefix={{ ansible_env.HOME }}/.node"
 
 - name: Add npm vars to .zshrc
-  lineinfile:
+  blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    line: "{{ item }}"
-  with_items:
-    - PATH="${HOME}/.node/bin:${PATH}"
-    - NODE_PATH="${HOME}/.node/lib/node_modules:${NODE_PATH}"
-    - MANPATH="${HOME}/.node/share/man:${MANPATH}"
+    create: yes
+    marker: "# {mark} npm ANSIBLE MANAGED BLOCK"
+    block: |
+      PATH="${HOME}/.node/bin:${PATH}"
+      NODE_PATH="${HOME}/.node/lib/node_modules:${NODE_PATH}"
+      MANPATH="${HOME}/.node/share/man:${MANPATH}"

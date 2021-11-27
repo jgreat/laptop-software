@@ -25,7 +25,7 @@
   git:
     repo: https://github.com/robbyrussell/oh-my-zsh.git
     dest: "{{ ansible_env.HOME }}/.oh-my-zsh"
-    depth: 1
+    depth: "1"
     update: no
   register: clone_ohmyzsh
 
@@ -46,7 +46,7 @@
   git:
     repo: https://github.com/denysdovhan/spaceship-prompt.git
     dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/themes/spaceship-prompt"
-    depth: 1
+    depth: "1"
   register: clone_spaceship
 
 - name: Link spaceship theme
@@ -60,3 +60,65 @@
     path: "{{ ansible_env.HOME }}/.zshrc"
     regexp: '^ZSH_THEME='
     line: 'ZSH_THEME="spaceship"'
+
+- name: Set vte in .zshrc for tilix
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    create: yes
+    marker: "# {mark} tilix ANSIBLE MANAGED BLOCK"
+    block: |
+      if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+        source /etc/profile.d/vte-2.91.sh
+      fi
+
+- name: Set kubectl options in .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    create: yes
+    marker: "# {mark} kubectl ANSIBLE MANAGED BLOCK"
+    block: |
+      source <(kubectl completion zsh)
+      source <(helm completion zsh)
+      export SPACESHIP_KUBECTL_VERSION_SHOW=false
+      export SPACESHIP_KUBECTL_SHOW=true
+
+
+- name: Do bad things with known_hosts
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.ssh/config"
+    create: yes
+    block: |
+      host *
+        StrictHostKeyChecking no
+        UserKnownHostsFile /dev/null
+
+- name: Set aliases in .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    create: yes
+    marker: "# {mark} aliases ANSIBLE MANAGED BLOCK"
+    block: |
+      alias tf=terraform
+      alias k=kubectl
+
+- name: Create ~/.protected
+  file:
+    path: "{{ ansible_env.HOME }}/.protected"
+    state: directory
+    mode: 0700
+
+- name: Create ~/.protected/.env
+  copy:
+    content: ""
+    dest: "{{ ansible_env.HOME }}/.protected/.env"
+    state: touch
+    force: no
+    mode: 0600
+
+- name: Set .protected in .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    create: yes
+    marker: "# {mark} .protected ANSIBLE MANAGED BLOCK"
+    block: |
+      source ${HOME}/.protected/.env

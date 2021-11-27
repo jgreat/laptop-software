@@ -87,6 +87,7 @@
     - code
     - signal-desktop
     - python3-pip
+    - azure-cli
 
 
 - name: Install awscli
@@ -101,28 +102,15 @@
     name: docker-compose
     executable: pip3
 
-- name: Check installed snaps
-  become: yes
-  command: snap list
-  register: snaps
-  changed_when: snaps.stdout is not search(item)
-  with_items:
-    - slack
-    - kubectl
-    - multipass
-    - helm
-    - kontena-lens
-
-- name: Install snaps
-  become: yes
-  command: snap install {{ item }} --classic
-  when: snaps is changed
-  with_items:
-    - slack
-    - kubectl
-    - multipass
-    - helm
-    - kontena-lens
+- name: Install Snaps
+  community.general.snap:
+    name:
+      - slack
+      - kubectl
+      - multipass
+      - helm
+      - kontena-lens
+    classic: yes
 
 #- name: Install zoom
 #  become: yes

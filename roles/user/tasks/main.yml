@@ -35,44 +35,8 @@
     value: jgreat@jgreat.me
     scope: global
 
-# - name: Link vte for tilix
-#   become: yes
-#   file:
-#     state: link
-#     src: /etc/profile.d/vte-2.91.sh
-#     dest: /etc/profile.d/vte.sh
-
-- name: Set vte in .zshrc for tilix
-  blockinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    create: yes
-    block: |
-      if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-        source /etc/profile.d/vte-2.91.sh
-      fi
-
-- name: Set kubectl options in .zshrc
-  blockinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    create: yes
-    block: |
-      source <(kubectl completion zsh)
-      export SPACESHIP_KUBECTL_VERSION_SHOW=false
-      export SPACESHIP_KUBECTL_SHOW=true
-
-- name: Do bad things with known_hosts
-  blockinfile:
-    path: "{{ ansible_env.HOME }}/.ssh/config"
-    create: yes
-    block: |
-      host *
-        StrictHostKeyChecking no
-        UserKnownHostsFile /dev/null
-
-- name: Set aliases in .zshrc
-  blockinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    create: yes
-    block: |
-      alias tf=terraform
-      alias k=kubectl
+- name: Link rancher-get-kubeconfig.sh script
+  copy:
+    dest: "{{ ansible_env.HOME }}/bin/rancher-get-kubeconfig.sh"
+    src: ./scripts/rancher-get-kubeconfig.sh
+    mode: 0755
