@@ -4,14 +4,14 @@
   lineinfile:
     path: /etc/hosts
     regexp: '^127\.0\.1\.1'
-    line: '127.0.1.1 mars'
+    line: '127.0.1.1 venus'
 
 - name: Set /etc/hostname
   become: yes
   lineinfile:
     path: /etc/hostname
     regexp: '.*'
-    line: mars
+    line: vensu
 
 # - name: Set hostname
 #   become: yes

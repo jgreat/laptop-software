@@ -108,11 +108,9 @@
     mode: 0700
 
 - name: Create ~/.protected/.env
-  copy:
-    content: ""
-    dest: "{{ ansible_env.HOME }}/.protected/.env"
+  file:
+    path: "{{ ansible_env.HOME }}/.protected/.env"
     state: touch
-    force: no
     mode: 0600
 
 - name: Set .protected in .zshrc
