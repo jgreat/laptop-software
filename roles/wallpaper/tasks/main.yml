@@ -1,10 +1,10 @@
----
+# ---
 
-- name: Download wallpapers
-  get_url:
-    url: "{{ item }}"
-    dest: "{{ ansible_env.HOME }}/Pictures"
-  with_items:
-    - "https://i.imgur.com/6yzpofi.jpg"
-    - "https://orig00.deviantart.net/f2cb/f/2014/311/7/6/lunar_3440x1440__4__by_thyrring-d85l30y.png"
-    - "https://orig00.deviantart.net/e0b5/f/2014/311/9/f/lunar_3440x1440__22__by_thyrring-d85l15t.png"
+# - name: Download wallpapers
+#   get_url:
+#     url: "{{ item }}"
+#     dest: "{{ ansible_env.HOME }}/Pictures"
+#   with_items:
+#     - "https://i.imgur.com/6yzpofi.jpg"
+#     - "https://orig00.deviantart.net/f2cb/f/2014/311/7/6/lunar_3440x1440__4__by_thyrring-d85l30y.png"
+#     - "https://orig00.deviantart.net/e0b5/f/2014/311/9/f/lunar_3440x1440__22__by_thyrring-d85l15t.png"

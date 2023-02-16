@@ -6,16 +6,16 @@
     mode: 0755
 
 - name: User - shell to zsh, groups to docker,vboxuser
-  become: yes
+  become: true
   user:
     name: "{{ ansible_user_id }}"
-    # generate_ssh_key: yes
+    # generate_ssh_key: true
     groups:
       - docker
       - plugdev
       # - vboxusers
     shell: /usr/bin/zsh
-    append: yes
+    append: true
 
 - name: Set git co alias
   git_config:

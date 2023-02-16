@@ -1,0 +1,39 @@
+# https://askubuntu.com/questions/1406888/ubuntu-22-04-gpu-passthrough-qemu
+
+- name: Install Apt Packages
+  become: true
+  apt:
+    pkg:
+    - qemu
+    - virt-manager
+    - qemu-kvm
+    - libvirt-daemon-system
+    - libvirt-clients
+    - bridge-utils
+    - swtmp
+    - swtpm-tools
+
+- name: Check kernel options
+  become: true
+  command: kernelstub -p
+  register: kernel_options
+  changed_when: kernel_options.stderr is not search(item)
+  with_items:
+  - "amd_iommu=on"
+  - "kvm.ignore_msrs=1"
+
+- name: Add kernel options to kernelstub
+  become: true
+  command: kernelstub -a "amd_iommu=on kvm.ignore_msrs=1"
+  when: kernel_options is changed
+  notify: reboot
+
+# 01:00.0 - nvidia
+# 01:00.1 - nvidia
+
+# 10de:2684
+# 10de:22ba
+
+# bus 003 - 0000:14:00.0 - attach KVM 1 - Red above Ethernet
+# bus 005 - 0000:17:0003 - attach KVM 4 - Red above usb-c
+

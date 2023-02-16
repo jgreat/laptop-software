@@ -2,7 +2,7 @@
 - hosts: localhost
   roles:
     - role: xps_9560
-      tags: 
+      tags:
         - hardware
       when: ansible_product_name == "XPS 15 9560"
 
@@ -29,17 +29,22 @@
         - user
 
     - role: zsh_theme
-      tags: 
+      tags:
         - zsh_theme
 
     - role: npm
-      tags: 
+      tags:
         - npm
 
     - role: keyboard_shortcuts
-      tags: 
+      tags:
         - keyboard_shortcuts
 
     - role: wallpaper
-      tags: 
+      tags:
         - wallpaper
+
+    - role: regium
+      tags:
+        - regium
+      when: ansible_product_name == "MS-7D70"

@@ -1,5 +1,5 @@
 - name: reboot
-  become: yes
+  become: true
   command: shutdown -r +1
   listen: reboot
 

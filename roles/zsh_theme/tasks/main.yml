@@ -17,7 +17,7 @@
       dest: Fura_Mono_Regular_Nerd_Font_Complete.otf
 
 - name: Update Font Cache
-  become: yes
+  become: true
   command: fc-cache -fv
   when: nerd_fonts is changed
 
@@ -64,7 +64,7 @@
 - name: Set vte in .zshrc for tilix
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    create: yes
+    create: true
     marker: "# {mark} tilix ANSIBLE MANAGED BLOCK"
     block: |
       if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
@@ -74,7 +74,7 @@
 - name: Set kubectl options in .zshrc
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    create: yes
+    create: true
     marker: "# {mark} kubectl ANSIBLE MANAGED BLOCK"
     block: |
       source <(kubectl completion zsh)
@@ -86,7 +86,7 @@
 - name: Do bad things with known_hosts
   blockinfile:
     path: "{{ ansible_env.HOME }}/.ssh/config"
-    create: yes
+    create: true
     block: |
       host *
         StrictHostKeyChecking no
@@ -95,7 +95,7 @@
 - name: Set aliases in .zshrc
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    create: yes
+    create: true
     marker: "# {mark} aliases ANSIBLE MANAGED BLOCK"
     block: |
       alias tf=terraform
@@ -116,7 +116,7 @@
 - name: Set .protected in .zshrc
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    create: yes
+    create: true
     marker: "# {mark} .protected ANSIBLE MANAGED BLOCK"
     block: |
       source ${HOME}/.protected/.env

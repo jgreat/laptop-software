@@ -1,6 +1,6 @@
 ---
 - name: Add kernel parameters to grub
-  become: yes
+  become: true
   lineinfile:
     path: "/etc/default/grub"
     regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
@@ -8,14 +8,14 @@
   register: grub
 
 - name: Run update-grub
-  become: yes
+  become: true
   command: update-grub
   when: grub|changed
   notify: reboot
 
 # I'm going stick to the nvidia drivers for a while
 # - name: Switch to Intel GPU
-#   become: yes
+#   become: true
 #   command: prime-select intel
 #   register: prime
 #   changed_when: prime.stdout is not search('the intel profile is already in use')

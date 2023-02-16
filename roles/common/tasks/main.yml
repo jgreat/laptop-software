@@ -1,6 +1,6 @@
 ---
 - name: Install Apt Keys
-  become: yes
+  become: true
   apt_key:
     id: "{{ item.id }}"
     url: "{{ item.url }}"
@@ -26,12 +26,13 @@
     # Google
     # - id: D38B4796
     #   url: https://dl.google.com/linux/linux_signing_key.pub
+    #   keyring: /etc/apt/trusted.gpg.d/google.gpg
     # Virtualbox
     # - id: 2980AECF
     #   url: https://www.virtualbox.org/download/oracle_vbox_2016.asc
 
 - name: Install Apt Repos
-  become: yes
+  become: true
   apt_repository:
     filename: "{{ item.file }}"
     repo: "{{ item.repo }}"
@@ -54,7 +55,7 @@
 
 
 # - name: Accept virtualbox ext pack license
-#   become: yes
+#   become: true
 #   debconf:
 #     name: virtualbox-ext-pack
 #     question: virtualbox-ext-pack/license
@@ -62,7 +63,7 @@
 #     vtype: select
 
 - name: Install Apt Packages
-  become: yes
+  become: true
   apt:
     pkg:
     - docker-ce
@@ -81,15 +82,19 @@
     - azure-cli
     - awscli
     - snapd
+    - libsensors-dev
+    - libsensors5
+    - lm-sensors
+    - psensor
 
 - name: Install Snaps
-  become: yes
+  become: true
   community.general.snap:
     name:
       - kubectl
       - multipass
       - helm
-    classic: yes
+    classic: true
 
 - name: Install flatpacks
   community.general.flatpak:
@@ -99,3 +104,4 @@
     - us.zoom.Zoom
     - org.signal.Signal
     - com.slack.Slack
+    - com.google.Chrome

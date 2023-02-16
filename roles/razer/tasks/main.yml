@@ -1,6 +1,6 @@
 ---
 - name: Check kernel options
-  become: yes
+  become: true
   command: kernelstub -p
   register: kernel_options
   changed_when: kernel_options.stderr is not search(item)
@@ -9,7 +9,7 @@
   - "button.lid_init_state=open"
 
 - name: Add kernel options to kernelstub
-  become: yes
+  become: true
   command: kernelstub -a "button.lid_init_state=open"
   when: kernel_options is changed
   notify: reboot
@@ -27,7 +27,7 @@
 #   register: download_firmware
 
 # - name: Untar AX-200 wifi firmware
-#   become: yes
+#   become: true
 #   unarchive:
 #     src: "{{ ansible_env.HOME }}/drivers/iwlwifi-cc-46.3cfab8da.0.tgz"
 #     dest: /lib/firmware
@@ -37,13 +37,13 @@
 #   notify: reboot
 
 # - name: Install Nvidia PPA
-#   become: yes
+#   become: true
 #   apt_repository:
 #     filename: nvidia
 #     repo: ppa:graphics-drivers/ppa
 
 # - name: Install Nvidia Drivers
-#   become: yes
+#   become: true
 #   apt:
 #     pkg:
 #     -  nvidia-driver-430
@@ -51,7 +51,7 @@
 
 
 # - name: Add kernel parameters to grub
-#   become: yes
+#   become: true
 #   lineinfile:
 #     path: "/etc/default/grub"
 #     regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
@@ -59,7 +59,7 @@
 #   register: grub
 
 # - name: Run update-grub
-#   become: yes
+#   become: true
 #   command: update-grub
 #   when: grub|changed
 #   notify: reboot
