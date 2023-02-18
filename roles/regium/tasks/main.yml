@@ -36,6 +36,27 @@
   when: kernel_options is changed
   notify: reboot
 
+# use nct6683 module to get system sensors
+- name: sensors - modprobe options
+  become: true
+  copy:
+    src: ./sensors/etc/modprobe.d/nct6683.conf
+    dest: /etc/modprobe.d/nct6683.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: sensors - modules-load
+  become: true
+  copy:
+    src: ./sensors//etc/modules-load.d/nct6683.conf
+    dest: /etc/modules-load.d/nct6683.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: sensors - Sensors configuration 
+
 # based mostly on https://github.com/bryansteiner/gpu-passthrough-tutorial
 
 # Add TMP module to boot windows 11
